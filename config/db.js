@@ -12,7 +12,7 @@ const conectarDB = async () => {
     } catch (error) {
         console.log("Error con base de datos");
         console.log(error);
-        process.exit(1);
+        process.exit(3);
     }
 }
 
