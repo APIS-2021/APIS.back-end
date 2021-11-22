@@ -69,9 +69,9 @@ const typeDefs = gql`
     }
 
     input ProductoEditarInput {
-        Nombre: String!
-        Precio: Float!
-        Cantidad: Int!
+        Nombre: String
+        Precio: Float
+        Cantidad: Int
         Asignado: ID
         Status: Boolean
     }
