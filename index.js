@@ -24,6 +24,12 @@ const server = new ApolloServer({
     }
 });
 
-server.listen({ port: process.env.PORT || 4000 }).then( ({url}) => {
-	console.log("express server is running on url: " + url);
-});
+const startServer = async () => {
+    const { url } = await server.listen({ port: process.env.PORT || 4000 })
+    console.log(`server running on ${url}`)
+};
+
+startServer();
+// server.listen({ port: process.env.PORT || 4000 }).then( ({url}) => {
+// 	console.log("express server is running on url: " + url);
+// });
