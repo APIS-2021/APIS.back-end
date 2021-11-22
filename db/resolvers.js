@@ -163,7 +163,11 @@ const resolvers = {
             if (!ctx.usuario) {
                 throw new Error('Falta token');
             }
-            // Comprobar que hogar exista *Pending*
+            // Comprobar que hogar exista
+            const hogar = await Hogar.findById(ObjectId(input.DeHogar));
+            if (!hogar) {
+                throw new Error('Hogar invalido');
+            }
             // Crear Producto
             const producto = new Producto(input);
             producto.save();
@@ -176,16 +180,36 @@ const resolvers = {
             }
             // Buscar producto
             var producto = await Producto.findById(ObjectId(id));
-            // Buscar hogar *Pending*
-            // Checar que el usuario tenga acceso al hogar
-            // if (hogar.Creador != ctx.usuario.id) {
-            //         if (!hogar.Habitantes.includes(ctx.usuario.id))
-            //     throw new Error('Permisos invalidos');
-            // }
+            // Buscar hogar
+            const hogar = await Hogar.findById(ObjectId(input.DeHogar));
+            if (!hogar) {
+                throw new Error('Hogar invalido');
+            }
+            if (hogar.Creador != ctx.usuario.id){
+                if (!hogar.Habitantes.includes(ctx.usuario.id)) {
+                    throw new Error('Permisos invalidos');
+                }
+            }
             // Checar si se cambia el asignado
-            // if (input.Asignado)
-            //     Checar que el usuario de asignado tenga acceso al hogar
+            if (input.Asignado) {
+                // Checar que el usuario de asignado tenga acceso al hogar
+                if (hogar.Creador != input.Asignado){
+                    if (!hogar.Habitantes.includes(input.Asignado)) {
+                        throw new Error('Permisos de persona asignada invalidos');
+                    }
+                }
+            }
             // Checar que los numeros sean positivos
+            if (input.Precio) {
+                if (input.Precio < 0) {
+                    throw new Error('Precio invalido');
+                }
+            }
+            if (input.Cantidad) {
+                if (input.Precio <= 0) {
+                    throw new Error('Cantidad invalida');
+                }
+            }
             // actualizar producto
             await Producto.findOneAndUpdate({_id:ObjectId(id)},input);
             producto = await Producto.findById(ObjectId(id));
@@ -196,13 +220,17 @@ const resolvers = {
             if (!ctx.usuario) {
                 throw new Error('Falta token');
             }
-            // Buscar hogar *Pending*
-            // const hogar = await Hogar.findById(ObjectId(id));
-            // Checar que el usuario tenga acceso al hogar
-            // if (hogar.Creador != ctx.usuario.id) {
-            //         if (!hogar.Habitantes.includes(ctx.usuario.id))
-            //     throw new Error('Permisos invalidos');
-            // }
+            // Buscar hogar
+            const hogar = await Hogar.findById(ObjectId(id));
+            if (!hogar) {
+                throw new Error('Hogar invalido');
+            }
+            if (hogar.Creador != ctx.usuario.id){
+                if (!hogar.Habitantes.includes(ctx.usuario.id)) {
+                    throw new Error('Permisos invalidos');
+                }
+            }
+            // Eliminar producto
             await Producto.findOneAndDelete({_id:ObjectId(id)});
             return "Producto eliminado";
         }
