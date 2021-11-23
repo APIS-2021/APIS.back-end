@@ -50,6 +50,7 @@ const typeDefs = gql`
 
     type Token {
         Token: String
+        Nombre: String
     }
 
     input UsuarioCompletoInput {

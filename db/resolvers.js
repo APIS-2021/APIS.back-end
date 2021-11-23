@@ -56,7 +56,8 @@ const resolvers = {
 
             // regresar token
             return {
-                Token: jwt.sign({id: checarUsuario.id}, process.env.SECRETA, {expiresIn:'24h'})
+                Token: jwt.sign({id: checarUsuario.id}, process.env.SECRETA, {expiresIn:'24h'}),
+                Nombre: Nombre
             };
         },
         nuevoHogar: async (_, {input}, ctx) => {
